@@ -1,0 +1,211 @@
+{
+	"info": {
+		"_postman_id": "d4fa92eb-d417-4d80-8a63-2edaeffa3e59",
+		"name": "micromorph",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9981836"
+	},
+	"item": [
+		{
+			"name": "post file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/micromorph/file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"micromorph",
+						"file"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\"micromorphMetaData\":{\n    \"name\":\"blabla\"\n},\n\"fileJsonFileContent\":\"{\\\"xereca\\\": \\\"bet\\\",\\\"blabla\\\":\\\"aa\\\"}\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8001/micromorph/data",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"micromorph",
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find all by page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/micromorph/data/find-all?page=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"micromorph",
+						"data",
+						"find-all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find all by page Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/micromorph/data/find-all-by-page?page=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"micromorph",
+						"data",
+						"find-all-by-page"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find-all-by-metadata",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/micromorph/data/find-all-by-metadata",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"micromorph",
+						"data",
+						"find-all-by-metadata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find all by page Copy",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "id",
+						"value": "f_u6pYwBNA5U3BteG6md",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"gvvBpYwBNA5U3BteJ6l5\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/micromorph/data/delete-by-id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"micromorph",
+						"data",
+						"delete-by-id"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "test elastic",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": { \n    \"bool\": { \n      \"must\": [\n        { \"match\": { \"metaName\":   \"file\"        }}\n      ]\n \n    }\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:9200/_search?pretty",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

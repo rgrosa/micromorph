@@ -1,0 +1,7 @@
+${AnsiColor.GREEN} _______ _____ _______  ______  _____  _______  _____   ______  _____  _     _
+${AnsiColor.GREEN} |  |  |   |   |       |_____/ |     | |  |  | |     | |_____/ |_____] |_____|
+${AnsiColor.GREEN} |  |  | __|__ |_____  |    \_ |_____| |  |  | |_____| |    \_ |       |     |
+${Ansi.GREEN} :: Powered by Java ${java.version}/${java.vm.name} ::
+${Ansi.GREEN} :: Ren 2024 ::
+
+

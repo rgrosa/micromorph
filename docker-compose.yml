@@ -1,0 +1,10 @@
+name: micromorph-service
+services:
+    elasticsearch:
+        container_name: elastic-search-server
+        ports:
+            - 9200:9200
+        environment:
+            - discovery.type=single-node
+            - xpack.security.enabled=false
+        image: docker.elastic.co/dockeelasticsearch/elasticsearch:8.8.2
