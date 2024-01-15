@@ -40,10 +40,50 @@
 			"name": "send data",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "appid",
+						"value": "WFNPortal",
+						"disabled": true
+					},
+					{
+						"key": "associateoid",
+						"value": "G3NR1M16SDJBA3AB",
+						"disabled": true
+					},
+					{
+						"key": "isisessionid",
+						"value": "EdCcA4zxiATRgcbS5tAkrS93fts=",
+						"disabled": true
+					},
+					{
+						"key": "orgoid",
+						"value": "G3JW63BJJ2WGYBXH",
+						"disabled": true
+					},
+					{
+						"key": "profiledn",
+						"value": "adpProfileID=WFNPractitioner 1,adpProductCode=WFNPortal,ou=products,o=PIFITBIRT1,ou=clients,o=adp.com^adpProfileID=CRTClientPrefAdmin 1,adpProductCode=CRT,ou=products,o=PIFITBIRT1,ou=clients,o=adp.com",
+						"disabled": true
+					},
+					{
+						"key": "sm_user",
+						"value": "AWestVA@PIFITBIRT1",
+						"disabled": true
+					},
+					{
+						"key": "sm_userdn",
+						"value": "uid=AWestVA@PIFITBIRT1,ou=Users,o=PIFITBIRT1,ou=clients,o=adp.com",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"micromorphMetaData\":{\n    \"name\":\"blabla\"\n},\n\"fileJsonFileContent\":\"{\\\"xereca\\\": \\\"bet\\\",\\\"blabla\\\":\\\"aa\\\"}\"\n}"
+					"raw": "\n{\n\"micromorphMetaData\":{\n    \"name\":\"blabla\"\n},\n\"fileJsonFileContent\":\"{\\\"xxx\\\": \\\"bet\\\",\\\"blabla\\\":\\\"aa\\\"}\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8001/micromorph/data",

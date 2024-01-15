@@ -6,7 +6,9 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "data-index")
+import javax.json.Json;
+
+@Document(indexName = "data_index")
 @Builder
 @lombok.Data
 public class Data {
@@ -32,6 +34,6 @@ public class Data {
     @Field(type = FieldType.Keyword, name = "metaContentHash")
     private String metaContentHash;
 
-    @Field(type = FieldType.Text, name = "fileContentJson")
-    private String fileContentJson;
+    @Field(type = FieldType.Object, name = "fileContentJson")
+    private Object fileContentJson;
 }

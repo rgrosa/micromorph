@@ -21,5 +21,4 @@ public class RequestByMetadataDTO implements Serializable {
         MicromorphMetaDataDTO micromorphMetaData;
         LocalDateTime fromDate;
         LocalDateTime toDate;
-        Integer page;
 }

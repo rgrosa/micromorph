@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface DataService {
 
@@ -16,7 +17,7 @@ public interface DataService {
 
     Page<Data> findAllData(Integer page) throws IOException;
 
-    SearchHits<Data> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException;
+    List<Data> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException;
 
     Data findById(String id);
 

@@ -41,7 +41,7 @@ public class DataController {
                 ));
     }
 
-    @GetMapping("/data/find-all")
+    @GetMapping("/data/find-all-by-page")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Response> findAll(
             @RequestParam(required = false) Integer page) throws Exception {
@@ -56,7 +56,6 @@ public class DataController {
     @GetMapping("/data/find-all-by-metadata")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Response> findAllByMetadata(
-            @RequestParam(required = false) Integer page,
             @RequestParam(required = false) String metaName,
             @RequestParam(required = false) String metaSource,
             @RequestParam(required = false) String documentFormat,
@@ -76,7 +75,6 @@ public class DataController {
                                                         .documentFormat(documentFormat).build()
                                         ).fromDate(fromDate)
                                         .toDate(toDate)
-                                        .page(page)
                                         .build()
                         )
                 ));

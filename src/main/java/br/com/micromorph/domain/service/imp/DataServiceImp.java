@@ -11,16 +11,17 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.elasticsearch.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DataServiceImp implements DataService {
@@ -39,9 +40,11 @@ public class DataServiceImp implements DataService {
     }
 
     @Override
-    public SearchHits<Data> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException {
-
-    return dataServicePersistence.findAllByMetadata(requestByMetadata);
+    public List<Data> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException {
+        return dataServicePersistence.findAllByMetadata(requestByMetadata)
+                .stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -8,21 +8,19 @@ import br.com.micromorph.infrasctructure.exception.PersistenceDeserializationExc
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 
 @Service
 public class DataServicePersistenceImp implements DataServicePersistence {
@@ -32,6 +30,8 @@ public class DataServicePersistenceImp implements DataServicePersistence {
 
     @Autowired
     private ElasticsearchOperations elasticsearchOperations;
+
+    private static final String DEFAULT_INDEX_NAME = "data_index";
 
     private final static Integer C_MAX_PAGE_SIZE = 1000;
 
@@ -45,7 +45,6 @@ public class DataServicePersistenceImp implements DataServicePersistence {
             }
             throw new DataAccessResourceFailureException(ex.getMessage());
         }
-
     }
 
     @Override
@@ -56,23 +55,11 @@ public class DataServicePersistenceImp implements DataServicePersistence {
 
     @Override
     public SearchHits<Data> findAllByMetadata(RequestByMetadataDTO requestByMetadata) {
-
-        //todo arrumar isso
-        QueryBuilder queryBuilder =
-                QueryBuilders
-                        .matchQuery("metaName", "file");
-
-        Query searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(queryBuilder)
-                .build();
-
         SearchHits<Data> productHits =
                 elasticsearchOperations
-                        .search(searchQuery,
+                        .search(generateQuery(requestByMetadata),
                                 Data.class,
-                                IndexCoordinates.of("data-index"));
-
-
+                                IndexCoordinates.of(DEFAULT_INDEX_NAME));
         return  productHits;
     }
 
@@ -90,5 +77,29 @@ public class DataServicePersistenceImp implements DataServicePersistence {
     @Override
     public Data findById(String id) {
         return dataRepository.findById(id).orElse(null);
+    }
+
+
+    private Query generateQuery(RequestByMetadataDTO requestByMetadata) {
+        Criteria criteria = new Criteria();
+        if(requestByMetadata.getMicromorphMetaData().getName() != null){
+            criteria.and("metaName").is(requestByMetadata.getMicromorphMetaData().getName());
+        }
+        if(requestByMetadata.getMicromorphMetaData().getSource() != null){
+            criteria.and("metaSource").is(requestByMetadata.getMicromorphMetaData().getSource());
+        }
+        if(requestByMetadata.getMicromorphMetaData().getDocumentFormat() != null){
+            criteria.and("metaDocumentFormat").is(requestByMetadata.getMicromorphMetaData().getDocumentFormat());
+        }
+        if(requestByMetadata.getFromDate() != null && requestByMetadata.getToDate() != null ){
+            criteria.and("metaCreatedAtEpoch").between(requestByMetadata.getFromDate(), requestByMetadata.getToDate());
+        }
+        if(requestByMetadata.getFromDate() != null && requestByMetadata.getToDate() == null ){
+            criteria.and("metaCreatedAtEpoch").greaterThanEqual(requestByMetadata.getFromDate());
+        }
+        if(requestByMetadata.getFromDate() == null && requestByMetadata.getToDate() != null ){
+            criteria.and("metaCreatedAtEpoch").lessThanEqual(requestByMetadata.getToDate());
+        }
+        return new CriteriaQuery(criteria);
     }
 }

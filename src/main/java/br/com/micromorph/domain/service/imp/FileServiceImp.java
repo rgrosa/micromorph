@@ -59,7 +59,7 @@ public class FileServiceImp implements FileService {
     private String processFileData(MultipartFile multipartFile) throws IOException {
        String fileData = getFileData(multipartFile.getInputStream());
         return switch (Objects.requireNonNull(multipartFile.getContentType())) {
-            case "csv", "xls", "xlsx" -> csvToJson(fileData);
+            case "csv" -> csvToJson(fileData);
             default -> fileData;
         };
     }
