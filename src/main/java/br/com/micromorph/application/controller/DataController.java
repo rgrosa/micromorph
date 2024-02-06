@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Validated
@@ -59,8 +60,9 @@ public class DataController {
             @RequestParam(required = false) String metaName,
             @RequestParam(required = false) String metaSource,
             @RequestParam(required = false) String documentFormat,
-            @RequestParam(required = false) LocalDateTime fromDate,
-            @RequestParam(required = false) LocalDateTime toDate
+            @RequestParam(required = false) Long fromDate,
+            @RequestParam(required = false) Long toDate,
+            @RequestParam(required = false) List<String> labels
             ) throws Exception {
         return ResponseEntity.ok().
                 body(new Response(
@@ -72,7 +74,8 @@ public class DataController {
                                                 MicromorphMetaDataDTO.builder()
                                                         .name(metaName)
                                                         .source(metaSource)
-                                                        .documentFormat(documentFormat).build()
+                                                        .documentFormat(documentFormat)
+                                                        .labels(labels).build()
                                         ).fromDate(fromDate)
                                         .toDate(toDate)
                                         .build()

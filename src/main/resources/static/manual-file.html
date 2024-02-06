@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark" >
+<html lang="en" data-bs-theme="dark">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Home / Micromorph</title>
+  <title>File Upload / Micromorph</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -20,7 +20,9 @@
 <body>
   <script src="assets/bootstrap/js/bootstrap.bundle.min.js" defer></script>
   <script src="assets/js/main.js" defer></script>
-  <header id="header-custom" class="header fixed-top d-flex align-items-center">
+  <script src="assets/js/file-upload.js" defer></script>
+
+  <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
@@ -70,71 +72,39 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Micromorph</h1>
+      <h1>Blank Page</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">File Upload</li>
         </ol>
       </nav>
     </div>
 
-    <section class="section dashboard">
+    <section class="section">
       <div class="row">
-        <div >
-          <div class="row">
-            <div class="">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">About</h5>
-                  <div>
-                    <p> Micromorph is a service to simplify the creation of datalakes, implemented using elastic.</p>
-                    <br>
-                    <p>This interface serves as documentation, in each page you can see more information about using the plataform. </p>
-                  </div>
-                  <br>
-                  <h2>Feature status </h2>
-                  <table class="table table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Feature</th>
-                      <th scope="col">Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Api Integration</td>
-                      <td>Done</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>RabbitMq</td>
-                      <td>Testing</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>File upload</td>
-                      <td>Done</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">File upload</h5>
+              <p>You can upload a file directly. (<b>.json</b>/<b>.csv</b>)</p>
+              <form id="form" enctype="multipart/form-data">
+              <input id="file" type="file"/>  <br><br>
+                <button class="submit-btn" type="submit">Upload</button>
+              </form>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
+        </div>
+    </section>
   </main>
   <footer id="footer" class="footer">
     <div class="copyright">
-    <span>Renan Rosa 2024 <strong>Micromorph</strong></span>.
+      <span>Renan Rosa 2024 <strong>Micromorph</strong></span>.
     </div>
-
   </footer>
-
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 </body>
+
 </html>

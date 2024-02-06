@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Builder
 @Data
@@ -19,6 +18,6 @@ public class RequestByMetadataDTO implements Serializable {
     private static final long serialVersionUID = 5405557479372292999L;
 
         MicromorphMetaDataDTO micromorphMetaData;
-        LocalDateTime fromDate;
-        LocalDateTime toDate;
+        Long fromDate;
+        Long toDate;
 }

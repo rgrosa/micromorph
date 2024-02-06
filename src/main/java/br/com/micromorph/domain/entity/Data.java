@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import javax.json.Json;
+import java.util.List;
 
 @Document(indexName = "data_index")
 @Builder
@@ -25,7 +25,7 @@ public class Data {
     @Field(type = FieldType.Keyword, name = "metaDocumentFormat")
     private String metaDocumentFormat;
 
-    @Field(type = FieldType.Keyword, name = "metaCreatedAtEpoch")
+    @Field(type = FieldType.Long, name = "metaCreatedAtEpoch")
     private Long metaCreatedAtEpoch;
 
     @Field(type = FieldType.Keyword, name = "metaFileSizeKilobytes")
@@ -35,5 +35,9 @@ public class Data {
     private String metaContentHash;
 
     @Field(type = FieldType.Object, name = "fileContentJson")
-    private Object fileContentJson;
+    private String fileContentJson;
+
+    @Field(type = FieldType.Keyword, name = "metaLabelList")
+    private List<String> metaLabels;
+
 }

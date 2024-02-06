@@ -1,18 +1,24 @@
 package br.com.micromorph.domain.service.imp;
 
 import br.com.micromorph.domain.dto.MicromorphDataDTO;
+import br.com.micromorph.domain.dto.MicromorphReturnDataDTO;
 import br.com.micromorph.domain.dto.RequestByMetadataDTO;
 import br.com.micromorph.domain.entity.Data;
 import br.com.micromorph.domain.enums.SourceEnum;
 import br.com.micromorph.domain.service.DataServicePersistence;
 import br.com.micromorph.domain.service.DataService;
 import br.com.micromorph.infrasctructure.exception.PersistenceDeserializationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.elasticsearch.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,21 +41,55 @@ public class DataServiceImp implements DataService {
     }
 
     @Override
-    public Page<Data> findAllData(Integer page) {
-        return dataServicePersistence.findAll(page);
+    public Page<MicromorphReturnDataDTO> findAllData(Integer page) throws JsonProcessingException {
+        List<MicromorphReturnDataDTO> micromorphReturnDataDTOList = new ArrayList<>();
+
+        var dataList = dataServicePersistence.findAll(page);
+
+        for (Data data : dataList) {
+            micromorphReturnDataDTOList.add(toMicromorphReturnData(data));
+        }
+
+        return new PageImpl<>(micromorphReturnDataDTOList,
+                dataList.getPageable(),
+                micromorphReturnDataDTOList.size()
+        );
     }
 
     @Override
-    public List<Data> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException {
-        return dataServicePersistence.findAllByMetadata(requestByMetadata)
+    public List<MicromorphReturnDataDTO> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException {
+        List<MicromorphReturnDataDTO> micromorphReturnDataDTOList = new ArrayList<>();
+
+        var dataList = dataServicePersistence.findAllByMetadata(requestByMetadata)
                 .stream()
                 .map(SearchHit::getContent)
-                .collect(Collectors.toList());
+                .toList();
+
+        for (Data data : dataList) {
+            micromorphReturnDataDTOList.add(toMicromorphReturnData(data));
+        }
+        return micromorphReturnDataDTOList;
     }
 
+
     @Override
-    public Data findById(String id) {
-        return  dataServicePersistence.findById(id);
+    public MicromorphReturnDataDTO findById(String id) throws JSONException, JsonProcessingException {
+        return toMicromorphReturnData(dataServicePersistence.findById(id));
+    }
+
+    private MicromorphReturnDataDTO toMicromorphReturnData(Data data) throws  JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode json = mapper.readTree(data.getFileContentJson());
+        return MicromorphReturnDataDTO.builder()
+                .id(data.getId())
+                .metaContentHash(data.getMetaContentHash())
+                .metaLabels(data.getMetaLabels())
+                .metaCreatedAtEpoch(data.getMetaCreatedAtEpoch())
+                .metaDocumentFormat(data.getMetaDocumentFormat())
+                .metaSource(data.getMetaSource())
+                .metaName(data.getMetaName())
+                .metaFileSizeKilobytes(data.getMetaFileSizeKilobytes())
+                .fileContentJson(json).build();
     }
 
     @Override
@@ -69,26 +109,19 @@ public class DataServiceImp implements DataService {
                                 ? micromorphData.getMicromorphMetaData().getSource()
                                 : SourceEnum.API.name()
                 )
-                .metaContentHash(
-                        micromorphData.getMicromorphMetaData().getContentHash() != null
-                                ? micromorphData.getMicromorphMetaData().getContentHash()
-                                : DigestUtils.sha256Hex(micromorphData.getFileJsonFileContent())
-                )
-                .metaCreatedAtEpoch(
-                        micromorphData.getMicromorphMetaData().getCreatedAt() != null
-                                ? micromorphData.getMicromorphMetaData().getCreatedAt().toEpochSecond(OffsetDateTime.now().getOffset())
-                                : LocalDateTime.now().toEpochSecond(OffsetDateTime.now().getOffset())
-                )
+                .metaContentHash(DigestUtils.sha256Hex(micromorphData.getFileJsonFileContent()))
+                .metaCreatedAtEpoch(LocalDateTime.now().toEpochSecond(OffsetDateTime.now().getOffset()))
                 .metaDocumentFormat(
                         micromorphData.getMicromorphMetaData().getDocumentFormat() != null
                                 ? micromorphData.getMicromorphMetaData().getDocumentFormat()
                                 : "json"
                 )
                 .metaFileSizeKilobytes(
-                        micromorphData.getMicromorphMetaData().getFileSize() != null
-                                ? micromorphData.getMicromorphMetaData().getFileSize()
-                                : micromorphData.getFileJsonFileContent().getBytes(StandardCharsets.UTF_8).length / 1024
+                        (long) (micromorphData.getFileJsonFileContent().getBytes(StandardCharsets.UTF_8).length / 1024)
                 )
+                .metaLabels(micromorphData.getMicromorphMetaData().getLabels())
                 .fileContentJson(micromorphData.getFileJsonFileContent()).build();
     }
+
+
 }

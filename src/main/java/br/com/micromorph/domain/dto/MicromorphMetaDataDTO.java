@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Data
@@ -24,4 +25,5 @@ public class MicromorphMetaDataDTO implements Serializable {
     private LocalDateTime createdAt;
     private Long fileSize;
     private String contentHash;
+    private List<String> labels;
 }

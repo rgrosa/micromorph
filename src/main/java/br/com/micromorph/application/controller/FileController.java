@@ -2,6 +2,7 @@ package br.com.micromorph.application.controller;
 
 import br.com.micromorph.application.resource.Response;
 import br.com.micromorph.domain.service.FileService;
+import br.com.micromorph.infrasctructure.exception.NotSupportedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class FileController {
     @PostMapping("/file")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Response> postFile(
-            @RequestParam("file") MultipartFile file) throws Exception {
+            @RequestParam("file") MultipartFile file) throws Exception, NotSupportedException {
         return ResponseEntity.ok().
                 body(new Response(
                         200,

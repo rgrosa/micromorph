@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>API Integration / Micromorph</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <script src="assets/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">Micromorph</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div>
+  </header>
+  <aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="manual-file.html">
+          <i class="bi bi-upload"></i>
+          <span>Manual File Upload</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="api-integration.html">
+          <i class="bi bi-server"></i>
+          <span>API integration</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="rabbit-integration.html">
+          <i class="bi bi-mailbox"></i>
+          <span>RabbitMq integration</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>API Integration</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">API Integration</li>
+        </ol>
+      </nav>
+    </div>
+    <section class="section">
+      <div class="row">
+        <div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"> <b style="color: #d3ce84">POST: </b>/data</h5>
+              <p>Saving data inside micromorph</p><br>
+              <h5>Payload Values: </h5>
+
+              <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Key</th>
+                  <th scope="col">DataType</th>
+                  <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <th>micromorphMetaData.name</th>
+                  <td>String</td>
+                  <td>Name to identify the payload</td>
+                </tr>
+                <tr>
+                  <th>micromorphMetaData.source</th>
+                  <td>String</td>
+                  <td>Source of the data</td>
+                </tr>
+                <tr>
+                  <th>micromorphMetaData.labels</th>
+                  <td>Array of string</td>
+                  <td>List of labels</td>
+                </tr>
+                <tr>
+                  <th>fileJsonFileContent</th>
+                  <td>Json</td>
+                  <td>Data in json format</td>
+                </tr>
+                </tbody>
+              </table>
+              <h5>Payload contract: </h5>
+              <code>
+                { <br>
+                "micromorphMetaData":{<br>
+                "name":"hello",<br>
+                "source":"API",<br>
+                "labels":["hello", "world"]<br>
+                },<br>
+                "fileJsonFileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
+                }<br>
+              </code>
+              <p>CURL example:</p>
+              <code>
+                curl --location 'http://localhost:8001/micromorph/data' \<br>
+                --header 'Content-Type: application/json' \<br>
+                --data '<br>
+                {<br>
+                "micromorphMetaData":{<br>
+                "name":"hello",<br>
+                "source":"API",<br>
+                "labels":["hello", "world"]<br>
+                },<br>
+                "fileJsonFileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
+                }'<br>
+              </code>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><b style="color: #96d384">GET: </b>/data/find-all-by-page</h5>
+              <p>Sending a https request will return all available values by page</p><br>
+              <h5>Query Params: </h5>
+              <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Param</th>
+                  <th scope="col">DataType</th>
+                  <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <th>page</th>
+                  <td>Number</td>
+                  <td>Page number (optional)</td>
+                </tr>
+                </tbody>
+              </table>
+              <p>CURL example:</p>
+              <code>
+                curl --location 'http://localhost:8001/micromorph/data/find-all-by-page?page=1'
+              </code>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><b style="color: #96d384">GET: </b>/data/find-by-id</h5>
+              <p>Sending a https request using his id as a query param, will return the object</p><br>
+                <h5>Query Params: </h5>
+              <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Param</th>
+                  <th scope="col">DataType</th>
+                  <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <th>id</th>
+                  <td>String</td>
+                  <td> id value</td>
+                </tr>
+                </tbody>
+              </table>
+                <p>CURL example:</p>
+               <code>
+                curl --location 'http://localhost:8001/micromorph/data/find-by-id?id=P7hW84wBXXaXxj3aYssuGgh'
+              </code>
+            </div>
+          </div>
+        </div>
+        <br>
+
+
+        <div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><b style="color: #96d384">GET: </b>/data/find-all-by-metadata</h5>
+              <p>Sending a https request will return all available values following the informed filters, if no filter is informed, will be return the most recent registers (5 minutes)</p><br>
+              <h5>Query Params: </h5>
+              <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Param</th>
+                  <th scope="col">DataType</th>
+                  <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <th>metaName</th>
+                  <td>String</td>
+                  <td>Payload Name (optional)</td>
+                </tr>
+                <tr>
+                  <th>metaSource</th>
+                  <td>String</td>
+                  <td>Datasource (optional)</td>
+                </tr>
+                <tr>
+                  <th>documentFormat</th>
+                  <td>String</td>
+                  <td>Document format (optional)</td>
+                </tr>
+                <tr>
+                  <th>fromDate</th>
+                  <td>Number Unixtime</td>
+                  <td>Start date (optional)</td>
+                </tr>
+                <tr>
+                  <th>toDate</th>
+                  <td>Number Unixtime</td>
+                  <td>End date (optional)</td>
+                </tr>
+                <tr>
+                  <th>labels</th>
+                  <td> Array of string</td>
+                  <td>List of labels (optional)</td>
+                </tr>
+                </tbody>
+              </table>
+
+              <p>CURL example:</p>
+              <code>
+                curl --location 'http://localhost:8001/micromorph/data/find-all-by-metadata?metaSource=api&metaName=test_data'
+              </code>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <div>
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><b style="color: #d38484">DELETE: </b>/data/delete-by-id</h5>
+              <p>Delete a register from micromorph</p>
+              <h5>Payload contract: </h5>
+              <code>
+                {<br>
+                "id": "exampleId"<br>
+                }<br>
+              </code>
+              <p>CURL example:</p>
+              <code>
+                curl --location --request DELETE 'http://localhost:8001/micromorph/data/delete-by-id' \<br>
+                --header 'id: f_u6pYwBNA5U3BteG6md' \<br>
+                --header 'Content-Type: application/json' \<br>
+                --data '{<br>
+                "id": "mSTe9IwBeyo8VKU1M_2s"<br>
+                }'<br>
+              </code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      <span>Renan Rosa 2024 <strong>Micromorph</strong></span>.
+    </div>
+  </footer>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+</body>
+
+</html>

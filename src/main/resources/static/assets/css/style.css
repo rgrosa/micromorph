@@ -14,7 +14,7 @@
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: sans-serif;
   background: #070808;
   color: #444444;
 }
@@ -35,7 +35,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Nunito", sans-serif;
+  font-family: sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -237,7 +237,7 @@ h6 {
   font-size: 18px;
   font-weight: 500;
   color: #709882;
-  font-family: "Poppins", sans-serif;
+  font-family: sans-serif;
 }
 
 .card-title span {
@@ -254,14 +254,14 @@ h6 {
   background-color: rgba(255, 255, 255, 0.6);
 }
 
-/* Alerts */
+
 .alert-heading {
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  font-family:  sans-serif;
   font-size: 20px;
 }
 
-/* Close Button */
+
 .btn-close {
   background-size: 25%;
 }
@@ -271,42 +271,9 @@ h6 {
   box-shadow: none;
 }
 
-/* Accordion */
-.accordion-item {
-  border: 1px solid #ebeef4;
-}
-
-.accordion-button:focus {
-  outline: 0;
-  box-shadow: none;
-}
-
-.accordion-button:not(.collapsed) {
-  color: #709882;
-  background-color: #070808;
-}
-
-.accordion-flush .accordion-button {
-  padding: 15px 0;
-  background: none;
-  border: 0;
-}
-
-.accordion-flush .accordion-button:not(.collapsed) {
-  box-shadow: none;
-  color: #84d3b6;
-}
-
-.accordion-flush .accordion-body {
-  padding: 0 0 15px 0;
-  color: #3e4f6f;
-  font-size: 15px;
-}
-
-/* Breadcrumbs */
 .breadcrumb {
   font-size: 14px;
-  font-family: "Nunito", sans-serif;
+  font-family:sans-serif;
   color: #709882;
   font-weight: 600;
 }
@@ -373,7 +340,7 @@ h6 {
   font-size: 26px;
   font-weight: 700;
   color: #709882;
-  font-family: "Nunito", sans-serif;
+  font-family:  sans-serif;
 }
 
 .header {

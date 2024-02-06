@@ -50,4 +50,10 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 		final Response response = new Response(HttpStatus.CREATED.value(), ex.getMessage(), null);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
+
+	@ExceptionHandler(NotSupportedException.class)
+	public ResponseEntity<?> notSupportedException(final Exception ex, final WebRequest request) {
+		final Response response = new Response(HttpStatus.NOT_IMPLEMENTED.value(), ex.getMessage(), null);
+		return new ResponseEntity<>(response, HttpStatus.NOT_IMPLEMENTED);
+	}
 }
