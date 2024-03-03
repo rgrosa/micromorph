@@ -1,5 +1,12 @@
 name: micromorph-service
 services:
+    micromorph:
+        container_name: micromorph
+        build: .
+        depends_on:
+            - elasticsearch
+        ports:
+            - "8000:5000"
     elasticsearch:
         container_name: elastic-search-server
         ports:

@@ -83,7 +83,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\n{\n\"micromorphMetaData\":{\n    \"name\":\"blabla\"\n},\n\"fileJsonFileContent\":\"{\\\"xxx\\\": \\\"bet\\\",\\\"blabla\\\":\\\"aa\\\"}\"\n}"
+					"raw": "\n{\n\"micromorphMetaData\":{\n    \"name\":\"blabla\"\n},\n\"fileContent\":\"{\\\"xxx\\\": \\\"bet\\\",\\\"blabla\\\":\\\"aa\\\"}\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8001/micromorph/data",

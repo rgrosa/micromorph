@@ -1,21 +1,23 @@
 package br.com.micromorph.domain.service.imp;
 
 import br.com.micromorph.domain.dto.MicromorphDataDTO;
+import br.com.micromorph.domain.dto.MicromorphMetaDataDTO;
 import br.com.micromorph.domain.dto.MicromorphReturnDataDTO;
 import br.com.micromorph.domain.dto.RequestByMetadataDTO;
 import br.com.micromorph.domain.entity.Data;
 import br.com.micromorph.domain.enums.SourceEnum;
 import br.com.micromorph.domain.service.DataServicePersistence;
 import br.com.micromorph.domain.service.DataService;
+import br.com.micromorph.infrasctructure.exception.NotSupportedException;
 import br.com.micromorph.infrasctructure.exception.PersistenceDeserializationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.elasticsearch.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -27,7 +29,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 public class DataServiceImp implements DataService {
@@ -36,8 +38,17 @@ public class DataServiceImp implements DataService {
     DataServicePersistence dataServicePersistence;
 
     @Override
-    public Data createAndPersistDataObject(MicromorphDataDTO micromorphData) throws IOException, PersistenceDeserializationException {
-        return dataServicePersistence.insertIntoDataIndex(MicromorphDataToData(micromorphData));
+    public void createAndPersistDataObject(List<MicromorphDataDTO> micromorphDataList) throws IOException, PersistenceDeserializationException, NotSupportedException {
+        List<Data> dataList = new ArrayList<>();
+        for(MicromorphDataDTO micromorphData: micromorphDataList){
+            dataList.add(MicromorphDataToData(micromorphData));
+        }
+        dataServicePersistence.insertBatchIntoDataIndex(dataList);
+    }
+
+    @Override
+    public Data createAndPersistDataObject(MicromorphDataDTO micromorphData) throws IOException, PersistenceDeserializationException, NotSupportedException {
+            return dataServicePersistence.insertIntoDataIndex(MicromorphDataToData(micromorphData));
     }
 
     @Override
@@ -77,9 +88,12 @@ public class DataServiceImp implements DataService {
         return toMicromorphReturnData(dataServicePersistence.findById(id));
     }
 
+    
+    //problema na conversao arrumar.
+    
     private MicromorphReturnDataDTO toMicromorphReturnData(Data data) throws  JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode json = mapper.readTree(data.getFileContentJson());
+        JsonNode json = mapper.readTree(data.getFileContent());
         return MicromorphReturnDataDTO.builder()
                 .id(data.getId())
                 .metaContentHash(data.getMetaContentHash())
@@ -89,7 +103,7 @@ public class DataServiceImp implements DataService {
                 .metaSource(data.getMetaSource())
                 .metaName(data.getMetaName())
                 .metaFileSizeKilobytes(data.getMetaFileSizeKilobytes())
-                .fileContentJson(json).build();
+                .fileContent(json).build();
     }
 
     @Override
@@ -97,10 +111,11 @@ public class DataServiceImp implements DataService {
         dataServicePersistence.deleteDataById(id);
     }
 
-    private Data MicromorphDataToData(MicromorphDataDTO micromorphData) {
-        if(micromorphData.getMicromorphMetaData().getName().isEmpty()){
-            throw new ResourceNotFoundException("No metadata name found");
+    private Data MicromorphDataToData(MicromorphDataDTO micromorphData) throws NotSupportedException {
+        if(micromorphData.getMicromorphMetaData() == null){
+            micromorphData.setMicromorphMetaData(MicromorphMetaDataDTO.builder().name(UUID.randomUUID().toString()).build() );
         }
+        var convertedFileContent = convertToFileDataToJson(micromorphData.getFileContent());
 
         return Data.builder()
                 .metaName(micromorphData.getMicromorphMetaData().getName())
@@ -109,7 +124,7 @@ public class DataServiceImp implements DataService {
                                 ? micromorphData.getMicromorphMetaData().getSource()
                                 : SourceEnum.API.name()
                 )
-                .metaContentHash(DigestUtils.sha256Hex(micromorphData.getFileJsonFileContent()))
+                .metaContentHash(DigestUtils.sha256Hex(convertedFileContent))
                 .metaCreatedAtEpoch(LocalDateTime.now().toEpochSecond(OffsetDateTime.now().getOffset()))
                 .metaDocumentFormat(
                         micromorphData.getMicromorphMetaData().getDocumentFormat() != null
@@ -117,11 +132,22 @@ public class DataServiceImp implements DataService {
                                 : "json"
                 )
                 .metaFileSizeKilobytes(
-                        (long) (micromorphData.getFileJsonFileContent().getBytes(StandardCharsets.UTF_8).length / 1024)
+                        (long) (convertedFileContent.getBytes(StandardCharsets.UTF_8).length / 1024)
                 )
                 .metaLabels(micromorphData.getMicromorphMetaData().getLabels())
-                .fileContentJson(micromorphData.getFileJsonFileContent()).build();
+                .fileContent(convertedFileContent).build();
     }
 
-
+    private String convertToFileDataToJson(String fileContent) throws NotSupportedException {
+        if(StringUtils.isNotEmpty(fileContent)){
+            try {
+                Gson gson = new Gson();
+                fileContent = fileContent.replace("\n", "");
+                fileContent = gson.toJson(new ObjectMapper().readValue(fileContent, Object.class));
+            } catch (JsonProcessingException e) {
+                throw new NotSupportedException("The data sent it`s not supported, please send a json");
+            }
+        }
+        return fileContent;
+    }
 }

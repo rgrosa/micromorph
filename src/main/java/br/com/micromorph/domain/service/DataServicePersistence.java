@@ -8,10 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface DataServicePersistence {
 
     Data insertIntoDataIndex(Data data) throws IOException, PersistenceDeserializationException;
+
+    void insertBatchIntoDataIndex(List<Data> data) throws IOException, PersistenceDeserializationException;
 
     Page<Data> findAll(Integer page);
 

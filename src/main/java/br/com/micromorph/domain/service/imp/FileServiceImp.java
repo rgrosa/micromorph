@@ -34,7 +34,7 @@ public class FileServiceImp implements FileService {
     @Override
     public Data postFile(MultipartFile file) throws Exception, NotSupportedException {
         MicromorphDataDTO micromorphData = makeMicromorphData(file);
-        micromorphData.setFileJsonFileContent(processFileData(file));
+        micromorphData.setFileContent(processFileData(file));
         return dataService.createAndPersistDataObject(micromorphData);
     }
 
@@ -51,7 +51,7 @@ public class FileServiceImp implements FileService {
                                 .labels(createFileLabel())
                                 .build()
                 )
-                .fileJsonFileContent(
+                .fileContent(
                         processFileData(file)
                 ).build();
     }
@@ -95,9 +95,6 @@ public class FileServiceImp implements FileService {
         } catch (IOException e) {
             e.printStackTrace();
 
-        }
-        if (returnValue != null){
-            returnValue = returnValue.replace("\n", "");
         }
 
         return returnValue;

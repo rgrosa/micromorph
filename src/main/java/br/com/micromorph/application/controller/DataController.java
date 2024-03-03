@@ -7,6 +7,9 @@ import br.com.micromorph.domain.dto.MicromorphDataDTO;
 import br.com.micromorph.domain.dto.MicromorphMetaDataDTO;
 import br.com.micromorph.domain.dto.RequestByMetadataDTO;
 import br.com.micromorph.domain.service.DataService;
+import br.com.micromorph.infrasctructure.exception.NotSupportedException;
+import br.com.micromorph.infrasctructure.exception.PersistenceDeserializationException;
+import br.com.micromorph.infrasctructure.util.JsonToDtoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,7 +36,8 @@ public class DataController {
     @PostMapping("/data")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Response> postData(
-            @Valid @RequestBody MicromorphDataDTO micromorphData) throws Exception {
+            @Valid @RequestBody String payload) throws IOException, PersistenceDeserializationException, NotSupportedException {
+        MicromorphDataDTO micromorphData = JsonToDtoConverter.convertJsonToDto(payload);
         return ResponseEntity.ok().
                 body(new Response(
                         200,
@@ -41,6 +45,20 @@ public class DataController {
                         dataService.createAndPersistDataObject(micromorphData)
                 ));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Response> postDataBatch(
+            @Valid @RequestBody String payload) throws IOException, PersistenceDeserializationException, NotSupportedException {
+
+        dataService.createAndPersistDataObject(JsonToDtoConverter.convertJsonToDtoList(payload));
+        return ResponseEntity.ok().
+                body(new Response(
+                        200,
+                        "Success",
+                        null
+                ));
+    }
+
 
     @GetMapping("/data/find-all-by-page")
     @ResponseStatus(HttpStatus.OK)

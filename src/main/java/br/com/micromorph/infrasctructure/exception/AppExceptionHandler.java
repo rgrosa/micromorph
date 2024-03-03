@@ -21,12 +21,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> globalExceptionHandler(final Exception ex, final WebRequest request) {
-		final ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
 	@ExceptionHandler(MultipleResourceException.class)
 	public ResponseEntity<?> multipleResourceException(final Exception ex, final WebRequest request) {
 		final ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
@@ -53,7 +47,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(NotSupportedException.class)
 	public ResponseEntity<?> notSupportedException(final Exception ex, final WebRequest request) {
-		final Response response = new Response(HttpStatus.NOT_IMPLEMENTED.value(), ex.getMessage(), null);
+		final Response response = new Response(HttpStatus.NOT_IMPLEMENTED.value(), ex.getCause().getMessage(), null);
 		return new ResponseEntity<>(response, HttpStatus.NOT_IMPLEMENTED);
 	}
 }

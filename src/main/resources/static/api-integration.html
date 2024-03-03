@@ -101,12 +101,13 @@
                   <td>List of labels</td>
                 </tr>
                 <tr>
-                  <th>fileJsonFileContent</th>
+                  <th>fileContent</th>
                   <td>Json</td>
                   <td>Data in json format</td>
                 </tr>
                 </tbody>
               </table>
+              <p>You can send only the data directly without informing the payload values, the data sent will be considered as fileContent</p><br>
               <h5>Payload contract: </h5>
               <code>
                 { <br>
@@ -115,7 +116,7 @@
                 "source":"API",<br>
                 "labels":["hello", "world"]<br>
                 },<br>
-                "fileJsonFileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
+                "fileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
                 }<br>
               </code>
               <p>CURL example:</p>
@@ -129,12 +130,88 @@
                 "source":"API",<br>
                 "labels":["hello", "world"]<br>
                 },<br>
-                "fileJsonFileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
+                "fileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"
                 }'<br>
               </code>
             </div>
           </div>
         </div>
+        <br>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"> <b style="color: #d3ce84">POST: </b>/data/save-batch</h5>
+            <p>Saving list of data inside micromorph</p><br>
+            <h5>Payload Values: </h5>
+
+            <table class="table table-bordered">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">Key</th>
+                <th scope="col">DataType</th>
+                <th scope="col">Description</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <th>micromorphMetaData.name</th>
+                <td>String</td>
+                <td>Name to identify the payload</td>
+              </tr>
+              <tr>
+                <th>micromorphMetaData.source</th>
+                <td>String</td>
+                <td>Source of the data</td>
+              </tr>
+              <tr>
+                <th>micromorphMetaData.labels</th>
+                <td>Array of string</td>
+                <td>List of labels</td>
+              </tr>
+              <tr>
+                <th>fileContent</th>
+                <td>Json</td>
+                <td>Data in json format</td>
+              </tr>
+              </tbody>
+            </table>
+            <h5>Payload contract: </h5>
+            <code>
+              { <br>
+              "micromorphMetaData":{<br>
+              "name":"hello",<br>
+              "source":"API",<br>
+              "labels":["hello", "world"]<br>
+              },<br>
+              "fileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
+              }<br>
+            </code>
+            <p>CURL example:</p>
+            <code>
+              curl --location 'http://localhost:8001/micromorph/data/save-batch' \<br>
+              --header 'Content-Type: application/json' \<br>
+              --data '[<br>
+              {<br>
+              "micromorphMetaData":{<br>
+              "name":"hello1",<br>
+              "source":"API",<br>
+              "documentFormat": "json",<br>
+              "labels":["x", "x"]<br>
+              },<br>
+              "fileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
+              },<br>
+              {<br>
+              "micromorphMetaData":{<br>
+              "name":"hello2",<br>
+              "source":"API",<br>
+              "documentFormat": "json",<br>
+              "labels":["x", "x"]<br>
+              },<br>
+              "fileContent":"{\"hello\": \"world\",\"world\":\"hello\"}"<br>
+              }]'<br>
+            </code>
+          </div>
+        </div>
+      </div>
         <br>
         <div>
           <div class="card">

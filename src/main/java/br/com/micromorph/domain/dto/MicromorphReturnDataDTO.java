@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -27,6 +26,6 @@ public class MicromorphReturnDataDTO implements Serializable {
     private Long metaCreatedAtEpoch;
     private Long metaFileSizeKilobytes;
     private String metaContentHash;
-    private JsonNode fileContentJson;
+    private JsonNode fileContent;
     private List<String> metaLabels;
 }

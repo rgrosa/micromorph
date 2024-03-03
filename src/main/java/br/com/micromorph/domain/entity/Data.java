@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.List;
 
-@Document(indexName = "data_index")
+@Document(indexName = "#{@environment.getProperty('micromorph.elastic.index.prefix')}")
 @Builder
 @lombok.Data
 public class Data {
@@ -34,8 +34,8 @@ public class Data {
     @Field(type = FieldType.Keyword, name = "metaContentHash")
     private String metaContentHash;
 
-    @Field(type = FieldType.Object, name = "fileContentJson")
-    private String fileContentJson;
+    @Field(type = FieldType.Keyword, name = "fileContent")
+    private String fileContent;
 
     @Field(type = FieldType.Keyword, name = "metaLabelList")
     private List<String> metaLabels;

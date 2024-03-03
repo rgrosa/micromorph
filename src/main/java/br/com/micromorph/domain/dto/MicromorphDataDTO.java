@@ -18,5 +18,5 @@ public class MicromorphDataDTO implements Serializable {
     private static final long serialVersionUID = 5405557479372592999L;
 
     private MicromorphMetaDataDTO micromorphMetaData;
-    private String fileJsonFileContent;
+    private String fileContent;
 }

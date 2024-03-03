@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 
 @Service
@@ -41,6 +42,18 @@ public class DataServicePersistenceImp implements DataServicePersistence {
             return dataRepository.save(data);
         }catch (DataAccessResourceFailureException ex){
             if (ex.getMessage().contains("201")){
+                throw new PersistenceDeserializationException("Data Created");
+            }
+            throw new DataAccessResourceFailureException(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void insertBatchIntoDataIndex(List<Data> dataList) throws PersistenceDeserializationException {
+        try{
+            dataRepository.saveAll(dataList);
+        }catch (DataAccessResourceFailureException ex){
+            if (ex.getMessage().contains("201") || ex.getMessage().contains("200")){
                 throw new PersistenceDeserializationException("Data Created");
             }
             throw new DataAccessResourceFailureException(ex.getMessage());

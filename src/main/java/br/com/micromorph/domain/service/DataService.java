@@ -5,6 +5,7 @@ import br.com.micromorph.domain.dto.MicromorphMetaDataDTO;
 import br.com.micromorph.domain.dto.MicromorphReturnDataDTO;
 import br.com.micromorph.domain.dto.RequestByMetadataDTO;
 import br.com.micromorph.domain.entity.Data;
+import br.com.micromorph.infrasctructure.exception.NotSupportedException;
 import br.com.micromorph.infrasctructure.exception.PersistenceDeserializationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -15,7 +16,9 @@ import java.util.List;
 
 public interface DataService {
 
-    Data createAndPersistDataObject(MicromorphDataDTO micromorphData) throws IOException, PersistenceDeserializationException;
+    Data createAndPersistDataObject(MicromorphDataDTO micromorphData) throws IOException, PersistenceDeserializationException, NotSupportedException;
+
+    void createAndPersistDataObject(List<MicromorphDataDTO> micromorphData) throws IOException, PersistenceDeserializationException, NotSupportedException;
 
     Page<MicromorphReturnDataDTO> findAllData(Integer page) throws IOException;
 
