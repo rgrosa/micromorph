@@ -10,10 +10,10 @@ import br.com.micromorph.domain.service.DataServicePersistence;
 import br.com.micromorph.domain.service.DataService;
 import br.com.micromorph.infrasctructure.exception.NotSupportedException;
 import br.com.micromorph.infrasctructure.exception.PersistenceDeserializationException;
+import br.com.micromorph.infrasctructure.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class DataServiceImp implements DataService {
     }
 
     @Override
-    public Page<MicromorphReturnDataDTO> findAllData(Integer page) throws JsonProcessingException {
+    public Page<MicromorphReturnDataDTO> findAllData(Integer page) throws JsonProcessingException, ResourceNotFoundException {
         List<MicromorphReturnDataDTO> micromorphReturnDataDTOList = new ArrayList<>();
 
         var dataList = dataServicePersistence.findAll(page);
@@ -68,7 +68,7 @@ public class DataServiceImp implements DataService {
     }
 
     @Override
-    public List<MicromorphReturnDataDTO> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException {
+    public List<MicromorphReturnDataDTO> findAllByMetadata(RequestByMetadataDTO requestByMetadata) throws IOException, ResourceNotFoundException {
         List<MicromorphReturnDataDTO> micromorphReturnDataDTOList = new ArrayList<>();
 
         var dataList = dataServicePersistence.findAllByMetadata(requestByMetadata)
@@ -84,20 +84,21 @@ public class DataServiceImp implements DataService {
 
 
     @Override
-    public MicromorphReturnDataDTO findById(String id) throws JSONException, JsonProcessingException {
+    public MicromorphReturnDataDTO findById(String id) throws JSONException, JsonProcessingException, ResourceNotFoundException {
         return toMicromorphReturnData(dataServicePersistence.findById(id));
     }
-
     
-    //problema na conversao arrumar.
-    
-    private MicromorphReturnDataDTO toMicromorphReturnData(Data data) throws  JsonProcessingException {
+    private MicromorphReturnDataDTO toMicromorphReturnData(Data data) throws JsonProcessingException, ResourceNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
+        if(data == null) {
+            throw new ResourceNotFoundException("No data found for your request");
+        }
+
         JsonNode json = mapper.readTree(data.getFileContent());
         return MicromorphReturnDataDTO.builder()
                 .id(data.getId())
                 .metaContentHash(data.getMetaContentHash())
-                .metaLabels(data.getMetaLabels())
+                .labels(data.getLabels())
                 .metaCreatedAtEpoch(data.getMetaCreatedAtEpoch())
                 .metaDocumentFormat(data.getMetaDocumentFormat())
                 .metaSource(data.getMetaSource())
@@ -134,16 +135,19 @@ public class DataServiceImp implements DataService {
                 .metaFileSizeKilobytes(
                         (long) (convertedFileContent.getBytes(StandardCharsets.UTF_8).length / 1024)
                 )
-                .metaLabels(micromorphData.getMicromorphMetaData().getLabels())
+                .labels(micromorphData.getMicromorphMetaData().getLabels())
                 .fileContent(convertedFileContent).build();
     }
 
     private String convertToFileDataToJson(String fileContent) throws NotSupportedException {
         if(StringUtils.isNotEmpty(fileContent)){
             try {
-                Gson gson = new Gson();
                 fileContent = fileContent.replace("\n", "");
-                fileContent = gson.toJson(new ObjectMapper().readValue(fileContent, Object.class));
+
+                JsonNode jsonNode = new ObjectMapper().readTree(fileContent);
+
+                fileContent = StringUtils.isEmpty(jsonNode.asText())? jsonNode.toString(): jsonNode.asText();
+
             } catch (JsonProcessingException e) {
                 throw new NotSupportedException("The data sent it`s not supported, please send a json");
             }

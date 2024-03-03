@@ -9,7 +9,7 @@ import br.com.micromorph.domain.dto.RequestByMetadataDTO;
 import br.com.micromorph.domain.service.DataService;
 import br.com.micromorph.infrasctructure.exception.NotSupportedException;
 import br.com.micromorph.infrasctructure.exception.PersistenceDeserializationException;
-import br.com.micromorph.infrasctructure.util.JsonToDtoConverter;
+import br.com.micromorph.infrasctructure.util.PayloadConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ public class DataController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Response> postData(
             @Valid @RequestBody String payload) throws IOException, PersistenceDeserializationException, NotSupportedException {
-        MicromorphDataDTO micromorphData = JsonToDtoConverter.convertJsonToDto(payload);
+        MicromorphDataDTO micromorphData = PayloadConverter.convertJsonToDto(payload);
         return ResponseEntity.ok().
                 body(new Response(
                         200,
@@ -49,8 +49,7 @@ public class DataController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Response> postDataBatch(
             @Valid @RequestBody String payload) throws IOException, PersistenceDeserializationException, NotSupportedException {
-
-        dataService.createAndPersistDataObject(JsonToDtoConverter.convertJsonToDtoList(payload));
+        dataService.createAndPersistDataObject(PayloadConverter.convertJsonToDtoList(payload));
         return ResponseEntity.ok().
                 body(new Response(
                         200,

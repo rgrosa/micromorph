@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d4fa92eb-d417-4d80-8a63-2edaeffa3e59",
+		"_postman_id": "c9cce9de-470f-4980-bd6c-440309e6e96c",
 		"name": "micromorph",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "9981836"
+		"_exporter_id": "33325136"
 	},
 	"item": [
 		{
@@ -128,7 +128,7 @@
 			"response": []
 		},
 		{
-			"name": "find all by page Copy",
+			"name": "find all by page",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -176,7 +176,7 @@
 			"response": []
 		},
 		{
-			"name": "find all by page Copy",
+			"name": "find all by page",
 			"request": {
 				"method": "DELETE",
 				"header": [

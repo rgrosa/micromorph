@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonToDtoConverter {
+public class PayloadConverter {
 
     public static MicromorphDataDTO convertJsonToDto(String json) {
         ObjectMapper objectMapper = new ObjectMapper();

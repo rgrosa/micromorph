@@ -34,10 +34,10 @@ public class Data {
     @Field(type = FieldType.Keyword, name = "metaContentHash")
     private String metaContentHash;
 
-    @Field(type = FieldType.Keyword, name = "fileContent")
+    @Field(type = FieldType.Text, name = "fileContent")
     private String fileContent;
 
     @Field(type = FieldType.Keyword, name = "metaLabelList")
-    private List<String> metaLabels;
+    private List<String> labels;
 
 }

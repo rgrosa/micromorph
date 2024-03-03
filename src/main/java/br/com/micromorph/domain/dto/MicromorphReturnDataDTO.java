@@ -27,5 +27,5 @@ public class MicromorphReturnDataDTO implements Serializable {
     private Long metaFileSizeKilobytes;
     private String metaContentHash;
     private JsonNode fileContent;
-    private List<String> metaLabels;
+    private List<String> labels;
 }

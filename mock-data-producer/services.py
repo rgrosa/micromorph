@@ -32,8 +32,8 @@ class Services:
         if(self.isFormatted):
             title = "testData-" + str(uuid.uuid4())
             payload = {
-                "micromorphMetaData": {"name": title},
-                "fileContent": data
+                "micromorphMetaData": {"name": title, "labels": ["cars", "test"]},
+                "fileContent": data,
             }
             payload = json.dumps(payload)
         else:
