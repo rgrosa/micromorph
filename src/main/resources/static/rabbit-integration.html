@@ -61,7 +61,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="rabbit-integration.html">
           <i class="bi bi-mailbox"></i>
-          <span>RabbitMq integration</span>
+          <span>RabbitMQ integration</span>
         </a>
       </li>
 
@@ -71,37 +71,74 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Blank Page</h1>
+      <h1>RabbitMQ Integration</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Blank</li>
+          <li class="breadcrumb-item active">RabbitMQ Integration</li>
         </ol>
       </nav>
     </div>
 
-    <section class="section">
+    <section class="section dashboard">
       <div class="row">
-        <div class="col-lg-6">
-
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Example Card</h5>
-              <p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>
+        <div >
+          <div class="row">
+            <div class="">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">RabbitMQ Configuration</h5>
+                  <div>
+                    <p> Micromorph supports message broker integration with RabbitMQ </p>
+                    <br>
+                    <p>To configure Micromorph to start consuming from a queue use the following properties:</p>
+                  </div>
+                  <br>
+                  <h2>Feature status </h2>
+                  <table class="table table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">PROPERTY</th>
+                      <th scope="col">EXAMPLE</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>RABBIT_HOST</td>
+                      <td>localhost</td>
+                    </tr>
+                    <tr>
+                      <td>RABBIT_PORT</td>
+                      <td>5672</td>
+                    </tr>
+                    <tr>
+                      <td>RABBIT_USERNAME</td>
+                      <td>guest</td>
+                    </tr>
+                    <tr>
+                      <td>RABBIT_PASSWORD</td>
+                      <td>guest</td>
+                    </tr>
+                    <tr>
+                      <td>MICROMORPH_DATA_QUEUE</td>
+                      <td>MICROMORPH_DATA_QUEUE</td>
+                    </tr>
+                    <tr>
+                      <td>FANOUT_EXCHANGE</td>
+                      <td>MICROMORPH_EXCHANGE</td>
+                    </tr>
+                    <tr>
+                      <td>USE_RABBITMQ</td>
+                      <td>true</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <br>
+                <p>The property <b>USE_RABBITMQ</b> is necessary to start the consumer.</p>
+              </div>
             </div>
           </div>
-
-        </div>
-
-        <div class="col-lg-6">
-
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Example Card</h5>
-              <p>This is an examle page with no contrnt. You can use it as a starter for your custom pages.</p>
-            </div>
-          </div>
-
         </div>
       </div>
     </section>
